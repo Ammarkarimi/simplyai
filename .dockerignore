@@ -1,0 +1,11 @@
+**/node_modules
+**/dist
+**/.next
+**/.turbo
+**/*.tsbuildinfo
+.git
+.env
+.env.*
+storage
+tests/e2e/test-results
+playwright-report

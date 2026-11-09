@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16
+        env: { POSTGRES_USER: postgres, POSTGRES_PASSWORD: postgres, POSTGRES_DB: simplyai_test }
+        ports: ["5432:5432"]
+        options: --health-cmd "pg_isready -U postgres" --health-interval 5s --health-retries 20
+      redis:
+        image: redis:7
+        ports: ["6379:6379"]
+        options: --health-cmd "redis-cli ping" --health-interval 5s --health-retries 20
+    env:
+      DATABASE_URL: postgresql://postgres:postgres@localhost:5432/simplyai_test?schema=public
+      TEST_DATABASE_URL: postgresql://postgres:postgres@localhost:5432/simplyai_test?schema=public
+      REDIS_URL: redis://localhost:6379
+      ENCRYPTION_KEY: "0000000000000000000000000000000000000000000000000000000000000000"
+      SESSION_SECRET: ci-session-secret
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: pnpm }
+      - run: pnpm install --frozen-lockfile
+      - name: Build packages
+        run: pnpm build:packages
+      - name: Build services
+        run: pnpm --filter @simplyai/api build && pnpm --filter @simplyai/worker build
+      - name: Unit, integration and API tests
+        run: pnpm test
+      - name: Type-check and build web
+        run: pnpm --filter @simplyai/web typecheck && NODE_ENV=production pnpm --filter @simplyai/web build

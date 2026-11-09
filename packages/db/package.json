@@ -12,7 +12,7 @@
     "migrate:deploy": "dotenv -e ../../.env -- prisma migrate deploy",
     "reset": "dotenv -e ../../.env -- prisma migrate reset --force",
     "seed": "dotenv -e ../../.env -- node dist/seed/run.js",
-    "test": "vitest run"
+    "test": "vitest run --passWithNoTests"
   },
   "prisma": {
     "seed": "node dist/seed/run.js"

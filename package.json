@@ -8,14 +8,14 @@
     "node": ">=20.11"
   },
   "scripts": {
-    "build": "pnpm -r --filter ./packages/** run build && pnpm -r --filter ./apps/** run build",
-    "build:packages": "pnpm -r --filter ./packages/** run build",
-    "dev": "pnpm build:packages && pnpm -r --parallel --filter ./apps/** run dev",
+    "build": "pnpm -r --filter \"./packages/*\" run build && pnpm -r --filter \"./apps/*\" run build",
+    "build:packages": "pnpm -r --filter \"./packages/*\" run build",
+    "dev": "pnpm build:packages && pnpm -r --parallel --filter \"./apps/*\" run dev",
     "dev:api": "pnpm --filter @simplyai/api dev",
     "dev:worker": "pnpm --filter @simplyai/worker dev",
     "dev:web": "pnpm --filter @simplyai/web dev",
     "typecheck": "pnpm -r run typecheck",
-    "test": "pnpm -r --filter ./packages/** --filter ./apps/api --filter ./apps/worker run test",
+    "test": "pnpm -r --filter \"./packages/*\" --filter @simplyai/api --filter @simplyai/worker run test",
     "test:e2e": "pnpm --filter @simplyai/e2e test",
     "test:load": "node tests/load/run.mjs",
     "db:generate": "pnpm --filter @simplyai/db generate",
