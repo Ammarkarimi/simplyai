@@ -75,7 +75,7 @@ async function openAiEmbed(req: LlmEmbedRequest, custom: boolean): Promise<LlmEm
   return { embeddings: data.map((d: any) => d.embedding as number[]), usage: { inputTokens: res.body?.usage?.prompt_tokens ?? 0 } };
 }
 
-// ───────────────────────── Anthropic ─────────────────────────
+// ───────────────────────── Messages API provider ─────────────────────────
 
 function anthropicMessages(messages: LlmMessage[]) {
   const out: Array<{ role: 'user' | 'assistant'; content: any[] }> = [];
