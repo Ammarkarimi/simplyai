@@ -1,0 +1,42 @@
+{
+  "name": "simplyai",
+  "private": true,
+  "version": "0.1.0",
+  "description": "SimplyAI - AI-powered workflow automation and integration platform",
+  "packageManager": "pnpm@10.28.0",
+  "engines": {
+    "node": ">=20.11"
+  },
+  "scripts": {
+    "build": "pnpm -r --filter ./packages/** run build && pnpm -r --filter ./apps/** run build",
+    "build:packages": "pnpm -r --filter ./packages/** run build",
+    "dev": "pnpm build:packages && pnpm -r --parallel --filter ./apps/** run dev",
+    "dev:api": "pnpm --filter @simplyai/api dev",
+    "dev:worker": "pnpm --filter @simplyai/worker dev",
+    "dev:web": "pnpm --filter @simplyai/web dev",
+    "typecheck": "pnpm -r run typecheck",
+    "test": "pnpm -r --filter ./packages/** --filter ./apps/api --filter ./apps/worker run test",
+    "test:e2e": "pnpm --filter @simplyai/e2e test",
+    "test:load": "node tests/load/run.mjs",
+    "db:generate": "pnpm --filter @simplyai/db generate",
+    "db:migrate": "pnpm --filter @simplyai/db migrate:deploy",
+    "db:migrate:dev": "pnpm --filter @simplyai/db migrate:dev",
+    "db:seed": "pnpm --filter @simplyai/db seed",
+    "db:reset": "pnpm --filter @simplyai/db reset"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "@types/node": "^22.10.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "@prisma/client",
+      "@prisma/engines",
+      "prisma",
+      "esbuild",
+      "@nestjs/core",
+      "sharp",
+      "unrs-resolver"
+    ]
+  }
+}
