@@ -40,6 +40,22 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)
 
+  packages/sdk:
+    dependencies:
+      '@simplyai/shared':
+        specifier: workspace:*
+        version: link:../shared
+      undici:
+        specifier: ^7.16.0
+        version: 7.30.2
+    devDependencies:
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)
+
   packages/shared:
     dependencies:
       zod:
@@ -779,6 +795,10 @@ packages:
   undici-types@6.21.0:
     resolution: {integrity: sha512-iwDZqg0QAGrg9Rav5H4n0M64c3mkR59cJ6wQp+7C4nI0gsmExaedaYLNO44eT4AtBBwjbTiGPMlt2Md0T9H9JQ==}
 
+  undici@7.30.2:
+    resolution: {integrity: sha512-mLyPQnHwUxaM/rideoK/+KL8DaAJLRl4aBCfmX444aCSLnIaomqPLtNRe2jdCYcsk5wZzXrDIQC8ZeYNRAYyIA==}
+    engines: {node: '>=20.18.1'}
+
   vite-node@3.2.4:
     resolution: {integrity: sha512-EbKSKh+bh1E1IFxeO0pg1n4dvoOTt0UDiXMd/qn++r98+jPO1xtJilvXldeuQ8giIB5IkpjCgMleHMNEsGH6pg==}
     engines: {node: ^18.0.0 || ^20.0.0 || >=22.0.0}
@@ -1452,6 +1472,8 @@ snapshots:
   typescript@5.9.3: {}
 
   undici-types@6.21.0: {}
+
+  undici@7.30.2: {}
 
   vite-node@3.2.4(@types/node@22.20.5)(jiti@2.7.0):
     dependencies:
