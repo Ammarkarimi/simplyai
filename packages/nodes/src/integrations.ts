@@ -3,7 +3,7 @@ import type { IntegrationDefinition, NodeDefinition, CredentialDefinition } from
 type Meta = Omit<IntegrationDefinition, 'triggers' | 'actions' | 'credentialTypes'> & { credentialTypes?: string[] };
 
 const META: Meta[] = [
-  { key: 'http', name: 'HTTP Request', description: 'Call any REST, GraphQL or webhook endpoint with built-in auth helpers and SSRF protection.', category: 'Developer', color: '#f97316', website: 'https://developer.mozilla.org/docs/Web/HTTP' },
+  { key: 'http', name: 'HTTP Request', description: 'Call any REST, GraphQL or webhook endpoint with built-in auth helpers and SSRF protection.', category: 'Developer', color: '#f97316', website: 'https://developer.mozilla.org/docs/Web/HTTP', credentialTypes: ['httpHeaderAuth', 'httpBearerAuth', 'httpBasicAuth', 'httpQueryAuth', 'oAuth2Api', 'restApi'] },
   { key: 'webhook', name: 'Webhooks', description: 'Receive HTTP requests with authentication, signature verification and request history.', category: 'Developer', color: '#7c3aed' },
   { key: 'openai', name: 'OpenAI', description: 'GPT models for chat, generation, classification, embeddings and agents.', category: 'AI', logo: 'openai', color: '#10a37f', website: 'https://platform.openai.com' },
   { key: 'anthropic', name: 'Anthropic', description: 'Anthropic models for chat, analysis and tool-using agents.', category: 'AI', logo: 'anthropic', color: '#d97757', website: 'https://www.anthropic.com' },

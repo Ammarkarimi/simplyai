@@ -1,20 +1,46 @@
 'use client';
 import * as React from 'react';
 import { DynamicIcon, type IconName } from 'lucide-react/dynamic';
-import * as si from 'simple-icons';
+import { siAirtable, siAnthropic, siAsana, siDiscord, siFirebase, siGmail, siGoogle, siGooglecalendar, siGoogledocs, siGoogledrive, siGooglegemini, siGooglesheets, siGraphql, siHubspot, siJira, siMongodb, siMysql, siNotion, siOpenai, siPostgresql, siRedis, siSalesforce, siShopify, siSlack, siStripe, siSupabase, siTelegram, siTrello, siTwilio, siWhatsapp, siWoocommerce, siWordpress } from 'simple-icons';
 import { cn } from '@/lib/utils';
 
-const BRAND_SLUGS: Record<string, string> = {
-  openai: 'openai', anthropic: 'anthropic', gemini: 'googlegemini', gmail: 'gmail', slack: 'slack', discord: 'discord', telegram: 'telegram', whatsapp: 'whatsapp', twilio: 'twilio',
-  googleSheets: 'googlesheets', googleDrive: 'googledrive', googleDocs: 'googledocs', googleCalendar: 'googlecalendar', google: 'google', airtable: 'airtable', notion: 'notion', trello: 'trello',
-  asana: 'asana', jira: 'jira', hubspot: 'hubspot', salesforce: 'salesforce', shopify: 'shopify', woocommerce: 'woocommerce', stripe: 'stripe', wordpress: 'wordpress', postgres: 'postgresql',
-  mysql: 'mysql', mongodb: 'mongodb', redis: 'redis', supabase: 'supabase', firebase: 'firebase', graphql: 'graphql',
+const BRANDS: Record<string, { path: string; hex: string }> = {
+  openai: siOpenai,
+  anthropic: siAnthropic,
+  gemini: siGooglegemini,
+  gmail: siGmail,
+  slack: siSlack,
+  discord: siDiscord,
+  telegram: siTelegram,
+  whatsapp: siWhatsapp,
+  twilio: siTwilio,
+  googleSheets: siGooglesheets,
+  googleDrive: siGoogledrive,
+  googleDocs: siGoogledocs,
+  googleCalendar: siGooglecalendar,
+  google: siGoogle,
+  airtable: siAirtable,
+  notion: siNotion,
+  trello: siTrello,
+  asana: siAsana,
+  jira: siJira,
+  hubspot: siHubspot,
+  salesforce: siSalesforce,
+  shopify: siShopify,
+  woocommerce: siWoocommerce,
+  stripe: siStripe,
+  wordpress: siWordpress,
+  postgres: siPostgresql,
+  mysql: siMysql,
+  mongodb: siMongodb,
+  redis: siRedis,
+  supabase: siSupabase,
+  firebase: siFirebase,
+  graphql: siGraphql,
 };
 
 function brand(key: string): { path: string; hex: string } | null {
-  const slug = BRAND_SLUGS[key] ?? key.toLowerCase();
-  const icon = (si as Record<string, unknown>)[`si${slug.charAt(0).toUpperCase()}${slug.slice(1)}`] as { path: string; hex: string } | undefined;
-  return icon ?? null;
+  return BRANDS[key] ?? null;
 }
 
 const LUCIDE_FALLBACK: Record<string, IconName> = { outlook: 'mail', teams: 'users', sms: 'message-square-text', smtp: 'mail', email: 'inbox', customLlm: 'cpu', http: 'globe', webhook: 'webhook', microsoft: 'layout-grid' };
