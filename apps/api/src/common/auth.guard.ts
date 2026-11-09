@@ -34,7 +34,7 @@ export class AuthGuard implements CanActivate {
 
     const rl = this.meta<{ limit: number; windowSec: number }>(RATE_LIMIT_KEY, ctx);
     if (rl) {
-      const r = await this.redis.rateLimit(`ip:${ctx.getClass().name}.${ctx.getHandler().name}:${clientIp(req)}`, rl.limit, rl.windowSec);
+      const r = await this.redis.rateLimit(`ip:${ctx.getClass().name}.${ctx.getHandler().name}:${clientIp(req)}`, rl.limit * Number(process.env.RATE_LIMIT_MULTIPLIER ?? 1), rl.windowSec);
       if (!r.ok) throw new HttpException({ message: 'Too many requests, please try again later' }, HttpStatus.TOO_MANY_REQUESTS);
     }
 
