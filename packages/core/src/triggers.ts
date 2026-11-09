@@ -98,3 +98,33 @@ export async function deactivateTriggers(db: PrismaClient, queues: Queues, workf
   await db.triggerRegistration.deleteMany({ where: { workflowId } });
   await db.webhook.updateMany({ where: { workflowId }, data: { active: false } });
 }
+
+/** Start every active workflow listening to an app event. Returns the number of executions created. */
+export async function dispatchEvent(
+  db: PrismaClient,
+  queues: Queues,
+  workspaceId: string,
+  event: string,
+  payload: Record<string, unknown>,
+  depth = 0,
+): Promise<number> {
+  if (depth > 3) return 0;
+  const { createExecution } = await import('./executions');
+  const regs = await db.triggerRegistration.findMany({ where: { workspaceId, kind: 'EVENT' }, include: { workflow: { include: { activeVersion: true } } } });
+  let started = 0;
+  for (const r of regs) {
+    if ((r.config as { eventName?: string }).eventName !== event) continue;
+    if (!r.workflow.active || !r.workflow.activeVersion) continue;
+    try {
+      await createExecution(db, queues, {
+        workspaceId, workflowId: r.workflowId, mode: 'EVENT', definition: r.workflow.activeVersion.definition as unknown as WorkflowDefinition,
+        workflowVersionId: r.workflow.activeVersionId, triggerNodeId: r.nodeKey, items: [{ json: { event, payload: payload as never, emittedAt: new Date().toISOString() } }],
+      });
+      await db.triggerRegistration.update({ where: { id: r.id }, data: { lastFiredAt: new Date() } });
+      started++;
+    } catch {
+      /* quota or validation problems are recorded by the caller's logs */
+    }
+  }
+  return started;
+}

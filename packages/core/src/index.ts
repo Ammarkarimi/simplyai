@@ -10,3 +10,4 @@ export * from './credentials';
 export * from './audit';
 export * from './executions';
 export * from './triggers';
+export * from './oauth';

@@ -25,3 +25,4 @@ export { PROVIDER_BY_CREDENTIAL, LLM_CREDENTIAL_TYPES, EMBEDDING_CREDENTIAL_TYPE
 export { evaluateCondition, evaluateGroup } from './lib/conditions';
 export { defineRestNode } from './lib/rest';
 export { queryDatabase } from './nodes/developer/sql';
+export { testConnectionCredential } from './lib/connection-test';
