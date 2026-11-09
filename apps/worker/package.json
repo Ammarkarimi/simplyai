@@ -1,0 +1,28 @@
+{
+  "name": "@simplyai/worker",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "dev": "tsc -p tsconfig.build.json && (tsc -p tsconfig.build.json --watch --preserveWatchOutput & node --watch dist/main.js)",
+    "start": "node dist/main.js",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@simplyai/ai": "workspace:*",
+    "@simplyai/core": "workspace:*",
+    "@simplyai/db": "workspace:*",
+    "@simplyai/engine": "workspace:*",
+    "@simplyai/nodes": "workspace:*",
+    "@simplyai/sdk": "workspace:*",
+    "@simplyai/shared": "workspace:*",
+    "bullmq": "^5.58.0",
+    "ioredis": "^5.7.0"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

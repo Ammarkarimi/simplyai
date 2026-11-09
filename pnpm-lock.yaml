@@ -127,6 +127,43 @@ importers:
         specifier: ^3.2.4
         version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(tsx@4.23.15)
 
+  apps/worker:
+    dependencies:
+      '@simplyai/ai':
+        specifier: workspace:*
+        version: link:../../packages/ai
+      '@simplyai/core':
+        specifier: workspace:*
+        version: link:../../packages/core
+      '@simplyai/db':
+        specifier: workspace:*
+        version: link:../../packages/db
+      '@simplyai/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
+      '@simplyai/nodes':
+        specifier: workspace:*
+        version: link:../../packages/nodes
+      '@simplyai/sdk':
+        specifier: workspace:*
+        version: link:../../packages/sdk
+      '@simplyai/shared':
+        specifier: workspace:*
+        version: link:../../packages/shared
+      bullmq:
+        specifier: ^5.58.0
+        version: 5.81.5
+      ioredis:
+        specifier: ^5.7.0
+        version: 5.11.1
+    devDependencies:
+      typescript:
+        specifier: 5.9.3
+        version: 5.9.3
+      vitest:
+        specifier: ^3.2.4
+        version: 3.2.7(@types/node@22.20.5)(jiti@2.7.0)(tsx@4.23.15)
+
   packages/ai:
     dependencies:
       '@simplyai/sdk':

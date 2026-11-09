@@ -73,7 +73,7 @@ export class KnowledgeController {
     await getStorage().put(storageKey, buffer, mimeType);
     const file = await this.db.storedFile.create({ data: { workspaceId: ws.workspaceId, storageKey, name, mimeType, size: buffer.length } });
     const doc = await this.db.knowledgeDocument.create({ data: { knowledgeBaseId: kbId, fileId: file.id, name, mimeType, size: buffer.length } });
-    await this.q.queues.ingest.add('ingest', { documentId: doc.id }, { jobId: `ingest:${doc.id}` });
+    await this.q.queues.ingest.add('ingest', { documentId: doc.id }, { jobId: `ingest-${doc.id}` });
     return doc;
   }
 
@@ -102,7 +102,7 @@ export class KnowledgeController {
     const doc = await this.db.knowledgeDocument.findFirst({ where: { id: docId, knowledgeBaseId: id } });
     if (!doc) throw new NotFoundException('Document not found');
     await this.db.knowledgeDocument.update({ where: { id: docId }, data: { status: 'PENDING', error: null } });
-    await this.q.queues.ingest.add('ingest', { documentId: docId }, { jobId: `ingest:${docId}:${Date.now()}` });
+    await this.q.queues.ingest.add('ingest', { documentId: docId }, { jobId: `ingest-${docId}-${Date.now()}` });
     return { ok: true };
   }
 

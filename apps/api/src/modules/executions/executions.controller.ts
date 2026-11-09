@@ -102,7 +102,6 @@ export class ExecutionsController {
     const ex = await this.find(ws, id);
     if (ex.status === 'QUEUED' || ex.status === 'WAITING') {
       await this.q.queues.executions.remove(ex.id).catch(() => undefined);
-      await this.q.queues.executions.remove(`resume:${ex.id}`).catch(() => undefined);
       const now = new Date();
       await this.db.execution.update({ where: { id }, data: { status: 'CANCELLED', finishedAt: now, durationMs: ex.startedAt ? now.getTime() - ex.startedAt.getTime() : 0, state: undefined } });
       await this.redis.publishEvent({ type: 'execution.finished', workspaceId: ws.workspaceId, executionId: id, workflowId: ex.workflowId, status: 'CANCELLED', at: now.toISOString() });
@@ -122,7 +121,7 @@ export class ExecutionsController {
     if (ex.status !== 'WAITING' || waiting?.kind !== 'approval') throw new BadRequestException('This execution is not waiting for approval');
     const claimed = await this.db.execution.updateMany({ where: { id, status: 'WAITING' }, data: { status: 'QUEUED' } });
     if (!claimed.count) throw new BadRequestException('This approval was already handled');
-    await this.q.queues.executions.add('resume', { executionId: id, resume: { approved: body.approved, data: { comment: body.comment ?? null, by: ws.userId }, userId: ws.userId ?? undefined } }, { jobId: `approval:${id}` });
+    await this.q.queues.executions.add('resume', { executionId: id, resume: { approved: body.approved, data: { comment: body.comment ?? null, by: ws.userId }, userId: ws.userId ?? undefined } }, { jobId: `approval-${id}-${Date.now()}` });
     await audit(this.db, { action: body.approved ? 'execution.approved' : 'execution.rejected', userId: ws.userId, workspaceId: ws.workspaceId, resourceType: 'execution', resourceId: id });
     return { ok: true };
   }

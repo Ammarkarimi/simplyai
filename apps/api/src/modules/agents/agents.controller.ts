@@ -112,7 +112,7 @@ export class AgentsController {
   }
 
   private async runJob(conversationId: string, workspaceId: string, approval?: { toolCallId: string; approved: boolean }) {
-    const job = await this.q.queues.agents.add('chat', { conversationId, workspaceId, approval }, { jobId: `chat:${conversationId}:${Date.now()}` });
+    const job = await this.q.queues.agents.add('chat', { conversationId, workspaceId, approval }, { jobId: `chat-${conversationId}-${Date.now()}` });
     let timedOut = false;
     try {
       await (job as Job).waitUntilFinished(this.q.queueEvents('agents'), 180_000);
