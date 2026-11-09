@@ -1,0 +1,25 @@
+{
+  "name": "@simplyai/engine",
+  "version": "0.1.0",
+  "private": true,
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "dev": "tsc -p tsconfig.json --watch --preserveWatchOutput",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@simplyai/sdk": "workspace:*",
+    "@simplyai/shared": "workspace:*",
+    "jsep": "^1.4.0",
+    "@jsep-plugin/arrow": "^1.0.6",
+    "@jsep-plugin/object": "^1.2.2",
+    "@jsep-plugin/template": "^1.0.5"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

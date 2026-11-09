@@ -113,6 +113,8 @@ export interface NodeDescription {
   outputExample?: Record<string, unknown>;
   /** node can be a tool for an AI agent */
   usableAsTool?: boolean;
+  /** output port index that starts a loop body (Loop node) */
+  loopOutput?: number;
 }
 
 export interface CredentialTypeDescription {
