@@ -5,3 +5,4 @@ export * from './plans';
 export * from './events';
 export * from './schemas';
 export * from './utils';
+export * from './apps';

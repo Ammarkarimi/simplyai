@@ -77,7 +77,7 @@ export interface NodePort {
   label?: string;
 }
 
-export type TriggerKind = 'manual' | 'webhook' | 'schedule' | 'poll' | 'event' | 'form' | 'chat' | 'error';
+export type TriggerKind = 'manual' | 'webhook' | 'schedule' | 'poll' | 'event' | 'form' | 'chat' | 'app' | 'error';
 
 export interface NodeCredentialRef {
   /** accepted credential types */
