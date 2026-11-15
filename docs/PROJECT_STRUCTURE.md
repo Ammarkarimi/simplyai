@@ -16,7 +16,7 @@ simplyai/
 │   └── web/                 Next.js app (App Router)
 │       └── src/
 │           ├── app/         routes: (auth), (app)/…, admin, public forms & chat
-│           ├── components/  ui (design system), layout, editor, charts…
+│           ├── components/  ui (design system), layout, editor, app-builder (UI builder + app runtime)…
 │           ├── lib/         api client, hooks, websocket, utils
 │           └── stores/      zustand stores (editor, workspace)
 ├── packages/

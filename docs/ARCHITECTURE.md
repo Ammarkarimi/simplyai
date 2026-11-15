@@ -95,6 +95,18 @@ in `Workflow.staticData` and only start executions when new items exist.
 on the execution (`WAITING`) and schedule a delayed `resume` job. Approval
 waits stay `WAITING` until a user approves/rejects through the UI or API.
 
+### Apps built with the UI builder
+The browser renders an app from its JSON definition (`apps/web/src/components/app-builder`):
+bindings such as `{{ table1.selectedRow.id }}` are evaluated client-side with
+the same sandboxed expression interpreter as workflows (`@simplyai/engine`,
+lenient mode). When an action runs a query, the browser sends only the query id
+and the evaluated arguments to `POST /public/apps/:slug/queries/:queryId`
+(or `/apps/:id/queries/:id/run` in the builder). The API loads the *published*
+definition, resolves the query there and either reads/writes the data table of
+the app's workspace or starts the workflow's **App Trigger** (`ExecutionMode.APP`)
+and waits up to 60 s for the output. Visitors can therefore never change which
+workflow or table a query uses.
+
 ## 4. Execution engine
 
 * **Data model** – n8n-style items: every connection carries an array of

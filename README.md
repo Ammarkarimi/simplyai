@@ -1,12 +1,13 @@
 # SimplyAI
 
-**AI-powered workflow automation and integration platform.** Build automations visually, connect 35+ apps, create AI agents with tools and knowledge, and monitor every execution in real time.
+**AI-powered workflow automation and integration platform.** Build automations visually, connect 35+ apps, create AI agents with tools and knowledge, design full user interfaces on top of them with a drag & drop App Builder, and monitor every execution in real time.
 
 ![Stack](https://img.shields.io/badge/stack-Next.js%20·%20NestJS%20·%20PostgreSQL%20·%20Redis%20·%20BullMQ-7c3aed)
 
 ## Highlights
 
 - **Visual workflow builder** – infinite canvas (XYFlow), drag & drop palette with 82 nodes, expressions, undo/redo, copy/paste, multi-select, groups, sticky notes, minimap, version history, publish/activate.
+- **App Builder (UI automation)** – drag & drop 37 components (layouts, forms, tables, charts, KPIs, media, navigation, modals, repeaters) and style everything: layout, typography with Google fonts, colors, gradients, glass effects, shadows, transforms, hover states, responsive tablet/mobile overrides and animations. Bind data with expressions, wire events to actions, query data tables or call workflows through the App Trigger, and publish versioned apps as private tools or public pages. See [docs/APP_BUILDER.md](docs/APP_BUILDER.md).
 - **Execution engine** – dependency-ordered and parallel scheduling, If/Switch/Filter/Merge, loops, waits that survive restarts, human approval, sub-workflows, retries with backoff, timeouts, continue-on-fail, error handlers, cancellation.
 - **Triggers** – manual, schedule (cron/interval), webhook (auth + HMAC), hosted forms, hosted chat, IMAP email polling, database polling, app events.
 - **AI platform** – OpenAI, Anthropic, Gemini and OpenAI-compatible endpoints; Agent Studio with tool calling, memory, knowledge bases (RAG), JSON output schemas, human approval and a playground; 13 AI nodes.
@@ -18,7 +19,7 @@
 ## Architecture
 
 ```
-apps/web     Next.js 15 UI (React 19, Tailwind, XYFlow, React Query, Zustand)
+apps/web     Next.js 15 UI (React 19, Tailwind, XYFlow, React Query, Zustand) + App Builder and app runtime
 apps/api     NestJS 11 REST API + socket.io gateway + webhook ingress
 apps/worker  BullMQ workers: executions, triggers, agents, document ingestion, sandbox
 packages/    shared · db (Prisma) · sdk · engine · nodes · ai · core
@@ -43,7 +44,7 @@ pnpm db:seed           # roles, plans, templates and the demo workspace
 pnpm dev               # api :4000, worker, web :3000
 ```
 
-Open http://localhost:3000 and sign in with **admin@simplyai.dev / SimplyAI-demo1** (platform admin, demo workspace with runnable workflows), or create a new account.
+Open http://localhost:3000 and sign in with **admin@simplyai.dev / SimplyAI-demo1** (platform admin, demo workspace with runnable workflows and the *Lead Manager* app at `/a/lead-manager-demo`), or create a new account.
 
 > For local development with webhooks calling services on `localhost`, set `ALLOW_PRIVATE_NETWORK=true`. Keep it `false` in production (SSRF protection).
 
@@ -69,9 +70,9 @@ pnpm test:load -- --url http://localhost:4000/api/v1/health --duration 30 --conc
 | `packages/engine`, `packages/nodes` | expression sandbox, branching, merge, loops, parallelism, retries, timeouts, cancellation, waits/resume, approvals, error handlers, transforms |
 | `packages/sdk` | SSRF guard, HTTP client, node definitions and validation |
 | `packages/ai` | provider adapters, tool-calling agent loop, approvals, embeddings, chunking |
-| `apps/api` | authentication, CSRF, RBAC, privilege escalation, tenant isolation, encrypted credentials, API key scopes & rate limits, webhook HMAC auth, quotas |
+| `apps/api` | authentication, CSRF, RBAC, privilege escalation, tenant isolation, encrypted credentials, API key scopes & rate limits, webhook HMAC auth, quotas, apps (versions, private/public access, data table and workflow queries) |
 | `apps/worker` | full execution pipeline, sandbox isolation & limits, credential auth, secret redaction, data tables, sub-workflows, approvals |
-| `tests/e2e` | sign-up, login, editor build/save/execute, templates, executions, data tables, credentials |
+| `tests/e2e` | sign-up, login, editor build/save/execute, templates, executions, data tables, credentials, App Builder drag & drop / events / publish, demo app with workflow scoring |
 
 ## Optional integrations
 
@@ -88,6 +89,7 @@ Features that need these show a clear "not configured" state in the UI.
 ## Documentation
 
 - In-app: **Documentation** in the sidebar (concepts, expressions, triggers, AI, webhooks, API, SDK, searchable node reference)
+- [docs/APP_BUILDER.md](docs/APP_BUILDER.md) — App Builder: components, styling, bindings, queries, publishing and security
 - [docs/API.md](docs/API.md) — public REST API and authentication
 - [docs/SDK.md](docs/SDK.md) — building custom nodes and integrations
 - [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) — production deployment and operations

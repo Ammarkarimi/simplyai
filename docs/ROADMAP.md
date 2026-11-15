@@ -49,8 +49,16 @@ Integration nodes call the providers' documented REST APIs; they are exercised b
 - ☑️ Templates marketplace (10 public templates, team and private templates)
 - ☑️ Admin panel: users, organizations, workspaces, plan limits, usage, health, logs, workers, queues, feature flags, integration toggles
 
-## Phase 7 — Production readiness
-- ✅ 84 unit/integration tests across 8 packages, 8 Playwright E2E tests, load test scripts
+## Phase 7 — App Builder (UI automation)
+- ✅ App model, draft/published versions, restore, duplicate, private/public access, custom URL slugs
+- ✅ Server-side queries: data table CRUD and workflows via the App Trigger (`ExecutionMode.APP`), tenant-isolated
+- ✅ Browser E2E: drag & drop, event wiring, preview, publish; demo app with workflow scoring
+- ☑️ Builder: 37 components, 6 blocks, 5 templates, layers, pages, data panel, undo/redo, copy/paste, autosave
+- ☑️ Style editor: layout, spacing, typography, gradients, effects, transforms, hover/tablet/mobile states, animations, custom CSS
+- ☑️ Bindings with live previews, 12 action types, themes with presets and automatic navigation
+
+## Phase 8 — Production readiness
+- ✅ 95 unit/integration tests across 8 packages, 10 Playwright E2E tests, load test scripts
 - ✅ Dockerfile (api, worker, web, migrate) and docker-compose stack with MinIO
 - ✅ CI workflow (build, tests, web type-check and build)
 - ✅ Deployment, API and SDK documentation
@@ -60,3 +68,4 @@ Integration nodes call the providers' documented REST APIs; they are exercised b
 - ⏳ SSO (SAML/OIDC) for Enterprise plans
 - ⏳ Collaborative editing presence in the workflow editor
 - ⏳ Binary file handling nodes (upload/download pipeline through object storage)
+- ⏳ App Builder: file upload component, custom code components, per-app visitor authentication for public apps, real-time collaborative editing

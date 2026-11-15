@@ -17,7 +17,7 @@ const C = ({ children }: { children: React.ReactNode }) => <code className="roun
 
 const SECTIONS = [
   ['getting-started', 'Getting started'], ['concepts', 'Core concepts'], ['expressions', 'Expressions'], ['triggers', 'Triggers'], ['flow', 'Branching, loops & waits'],
-  ['errors', 'Error handling & retries'], ['ai', 'AI agents & RAG'], ['webhooks', 'Webhooks'], ['api', 'Public REST API'], ['auth', 'Authentication & roles'],
+  ['errors', 'Error handling & retries'], ['ai', 'AI agents & RAG'], ['apps', 'App Builder (UI)'], ['webhooks', 'Webhooks'], ['api', 'Public REST API'], ['auth', 'Authentication & roles'],
   ['sdk', 'Custom nodes (SDK)'], ['security', 'Security'], ['nodes', 'Node reference'],
 ] as const;
 
@@ -99,6 +99,19 @@ export default function DocsPage() {
           <H2 id="ai">AI agents & RAG</H2>
           <P>Create agents in <b>AI Agents</b>: choose OpenAI, Anthropic, Gemini or any OpenAI-compatible endpoint, write instructions, add tools (HTTP, workflows, knowledge search, data tables, code, calculator, date/time, web search) and attach knowledge bases. Tools can require human approval. Test in the playground, then use the <b>AI Agent</b> node with a session id for conversation memory.</P>
           <P>Knowledge bases chunk and embed uploaded documents (PDF, Markdown, text, CSV, JSON, HTML). The <b>Vector Search</b> and <b>RAG</b> nodes retrieve the most similar chunks and answer with citations.</P>
+
+          <H2 id="apps">App Builder (UI)</H2>
+          <P>Build user interfaces on top of your automations: internal tools, dashboards, customer portals, forms, landing pages and AI chat apps. Open <b>App Builder</b> in the sidebar, start from a template and drag components from the <b>Insert</b> panel onto the canvas.</P>
+          <P><b>Components.</b> Containers, grids, cards, tabs, modals, lists (repeaters) and forms hold other components. Content: headings, text, Markdown, buttons, links, navigation bars, images, icons, avatars, video and embeds. Inputs: text, text area, select, radio, checkbox, switch, date, slider, rating and color. Data: tables, charts (bar, line, area, pie, donut, radial), KPI stats, progress, badges and alerts.</P>
+          <P><b>Styling.</b> Every component has a visual style editor: layout (flex/grid, direction, alignment, gap), size, padding and margin, typography (any Google font), colors, gradients and background images, borders and radius, shadows, glass blur, transforms, transitions, positioning, entrance and looping animations and free-form CSS. Edit the <b>Hover</b>, <b>Tablet</b> and <b>Mobile</b> states separately for responsive, interactive designs. The theme (Theme button) sets colors, fonts, corner radius, light/dark mode and automatic navigation; use <C>var(--app-primary)</C>, <C>var(--app-accent)</C>, <C>var(--app-surface)</C>… anywhere.</P>
+          <P><b>Bindings.</b> Any property or style accepts <C>{'{{ expressions }}'}</C> evaluated live. Reference inputs by name (<C>{'{{ emailInput.value }}'}</C>), tables (<C>{'{{ table1.selectedRow }}'}</C>), forms (<C>{'{{ form1.data }}'}</C>), queries (<C>{'{{ getLeads.data }}'}</C>, <C>.loading</C>, <C>.error</C>), app state (<C>{'{{ state.count }}'}</C>), the signed-in <C>user</C> and URL parameters (<C>url</C>). Inside a List use <C>item</C> and <C>index</C>.</P>
+          <P><b>Queries.</b> In the <b>Data</b> panel add queries: <i>Workflow</i> runs a workflow that starts with an <b>App Trigger</b> and returns the output of its last node; <i>Data table</i> lists, gets, inserts, updates or deletes rows; <i>Static</i> holds JSON or just chains actions. Queries can run on load, transform their result and run actions on success or error. They execute on the server from the saved app, so visitors can only pass arguments, never change the workflow or table.</P>
+          <Code>{`Workflow query payload:   {{ ({ email: emailInput.value, plan: planSelect.value }) }}
+Data table insert data:   {{ form1.data }}
+Data table update rowId:  {{ table1.selectedRow.id }}
+Transform:                {{ data.filter((r) => r.status === "new") }}`}</Code>
+          <P><b>Events & actions.</b> Buttons, inputs, tables, forms, lists and pages trigger actions in order: run query, set state, go to page, open URL, show notification, open/close modal, set or reset inputs, copy, scroll to a component and download JSON/CSV. Each action can have an “only when” condition.</P>
+          <P><b>Publishing.</b> The builder autosaves a draft; <b>Preview</b> lets you click through it (workflow queries run the workflow draft). <b>Publish</b> creates a version served at <C>{origin + '/a/<slug>'}</C> and you can restore any version. <b>Share</b> chooses between <i>workspace members</i> (sign-in required, needs the App read permission) and <i>anyone with the link</i>. Published apps call the <b>active</b> version of their workflows. Editors and above build apps; every role can open private apps.</P>
 
           <H2 id="webhooks">Webhooks</H2>
           <P>Each Webhook Trigger gets a test URL (runs the saved draft) and a production URL (active version). Configure header token, basic auth or HMAC signatures in <b>Webhooks</b>. Signature check example for senders:</P>

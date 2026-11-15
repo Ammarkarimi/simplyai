@@ -66,7 +66,7 @@ export const RUNTIME_CSS = `
 .sai-card-title{font-family:var(--app-heading-font),var(--app-font);font-weight:650;font-size:1.05rem}
 .sai-muted{color:var(--app-muted);font-size:.875rem}
 .sai-text{margin:0;line-height:1.6;white-space:pre-wrap;overflow-wrap:anywhere}
-.sai-md{display:flex;flex-direction:column;gap:.65em;line-height:1.65}.sai-md ul,.sai-md ol{margin:0;padding-left:1.4em}.sai-md h1,.sai-md h2,.sai-md h3{margin-top:.3em}
+.sai-md{display:flex;flex-direction:column;gap:.65em;line-height:1.65}.sai-md ul,.sai-md ol{margin:0;padding-left:1.4em}.sai-md ul{list-style:disc}.sai-md ol{list-style:decimal}.sai-md h1,.sai-md h2,.sai-md h3{margin-top:.3em}
 .sai-code{font-family:ui-monospace,monospace;font-size:.88em;background:color-mix(in srgb,var(--app-text) 8%,transparent);padding:.1em .35em;border-radius:6px}
 .sai-pre{margin:0;padding:12px 14px;border-radius:calc(var(--app-radius)*.7);background:color-mix(in srgb,var(--app-text) 6%,transparent);overflow:auto;font-size:.85em}
 .sai-quote{margin:0;padding-left:12px;border-left:3px solid var(--app-primary);color:var(--app-muted)}
