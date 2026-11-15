@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import {
-  LayoutDashboard, Workflow, Bot, Puzzle, KeyRound, Activity, LayoutTemplate, Table2, Variable, Webhook, Users, Settings, BookOpen, ShieldCheck, PanelLeftClose, PanelLeftOpen,
+  LayoutDashboard, Workflow, Bot, AppWindow, Puzzle, KeyRound, Activity, LayoutTemplate, Table2, Variable, Webhook, Users, Settings, BookOpen, ShieldCheck, PanelLeftClose, PanelLeftOpen,
 } from 'lucide-react';
 import { Logo } from '@/components/icons';
 import { Tooltip } from '@/components/ui/misc';
@@ -14,6 +14,7 @@ export const NAV = [
   { href: '/overview', label: 'Overview', icon: LayoutDashboard },
   { href: '/workflows', label: 'Workflows', icon: Workflow },
   { href: '/agents', label: 'AI Agents', icon: Bot },
+  { href: '/apps', label: 'App Builder', icon: AppWindow },
   { href: '/integrations', label: 'Integrations', icon: Puzzle },
   { href: '/credentials', label: 'Credentials', icon: KeyRound },
   { href: '/executions', label: 'Executions', icon: Activity },

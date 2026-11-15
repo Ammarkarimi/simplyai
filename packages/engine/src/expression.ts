@@ -126,7 +126,7 @@ interface Scope {
 
 class Interpreter {
   private steps = 0;
-  constructor(private readonly root: Record<string, unknown>) {}
+  constructor(private readonly root: Record<string, unknown>, private readonly lenient = false) {}
 
   run(node: Node): unknown {
     return this.eval(node, { vars: {} });
@@ -225,7 +225,7 @@ class Interpreter {
 
   private getMember(obj: unknown, prop: string | number, optional: boolean): unknown {
     if (obj === null || obj === undefined) {
-      if (optional) return undefined;
+      if (optional || this.lenient) return undefined;
       throw new ExpressionError(`Cannot read "${prop}" of ${obj}`);
     }
     if (typeof obj === 'string') {
@@ -329,8 +329,13 @@ function parse(code: string): Node {
   return ast;
 }
 
-export function evaluateExpression(code: string, context: Record<string, unknown>): unknown {
-  return new Interpreter(context).run(parse(code.trim()));
+export interface EvaluateOptions {
+  /** reading a property of null/undefined yields undefined instead of throwing (UI bindings) */
+  lenient?: boolean;
+}
+
+export function evaluateExpression(code: string, context: Record<string, unknown>, opts: EvaluateOptions = {}): unknown {
+  return new Interpreter(context, !!opts.lenient).run(parse(code.trim()));
 }
 
 const TEMPLATE_RE = /\{\{([\s\S]+?)\}\}/g;

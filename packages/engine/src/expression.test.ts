@@ -39,6 +39,15 @@ describe('expressions', () => {
   });
 });
 
+describe('lenient expressions', () => {
+  it('reads missing properties as undefined only when lenient', () => {
+    expect(() => evaluateExpression('a.b.c', { a: {} })).toThrow();
+    expect(evaluateExpression('a.b.c', { a: {} }, { lenient: true })).toBeUndefined();
+    expect(evaluateExpression('a.b ? 1 : 2', { a: null }, { lenient: true })).toBe(2);
+    expect(() => evaluateExpression('a.constructor', { a: {} }, { lenient: true })).toThrow();
+  });
+});
+
 describe('redactor', () => {
   it('replaces secret values deeply', () => {
     const r = createRedactor(['supersecret', 'abc']);

@@ -156,6 +156,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.8
         version: 1.4.1(@types/react-dom@19.3.0(@types/react@19.3.0))(@types/react@19.3.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      '@simplyai/engine':
+        specifier: workspace:*
+        version: link:../../packages/engine
       '@simplyai/shared':
         specifier: workspace:*
         version: link:../../packages/shared

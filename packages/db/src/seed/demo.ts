@@ -2,6 +2,7 @@ import type { Prisma, PrismaClient } from '@prisma/client';
 import type { WorkflowDefinition } from '@simplyai/shared';
 import { hashPassword } from '../password';
 import { note, workflow } from './builder';
+import { seedDemoApp } from './demo-app';
 
 export const DEMO_EMAIL = 'admin@simplyai.dev';
 export const DEMO_PASSWORD = 'SimplyAI-demo1';
@@ -79,7 +80,13 @@ export async function seedDemo(db: PrismaClient) {
   const owner = await db.role.findFirstOrThrow({ where: { workspaceId: null, key: 'owner' } });
   const free = await db.plan.findUniqueOrThrow({ where: { key: 'professional' } });
   let user = await db.user.findUnique({ where: { email: DEMO_EMAIL } });
-  if (user) return { email: DEMO_EMAIL, created: false };
+  if (user) {
+    // existing installs: add demo content introduced after the first seed
+    const ws = await db.workspace.findFirst({ where: { slug: 'operations', members: { some: { userId: user.id } } } });
+    const leadsTable = ws && (await db.dataTable.findFirst({ where: { workspaceId: ws.id, name: 'Leads' } }));
+    const app = ws && leadsTable ? await seedDemoApp(db, { workspaceId: ws.id, userId: user.id, leadsTableId: leadsTable.id }) : false;
+    return { email: DEMO_EMAIL, created: false, appCreated: app };
+  }
   user = await db.user.create({ data: { email: DEMO_EMAIL, name: 'Avery Admin', passwordHash: await hashPassword(DEMO_PASSWORD), emailVerifiedAt: new Date(), isPlatformAdmin: true } });
   const org = await db.organization.create({ data: { name: 'Acme Inc', slug: 'acme', members: { create: { userId: user.id, role: 'OWNER' } } } });
   await db.subscription.create({ data: { organizationId: org.id, planId: free.id, currentPeriodEnd: new Date(Date.now() + 30 * 86_400_000) } });
@@ -125,5 +132,6 @@ export async function seedDemo(db: PrismaClient) {
       ],
     },
   });
+  await seedDemoApp(db, { workspaceId: ws.id, userId: user.id, leadsTableId: leads.id });
   return { email: DEMO_EMAIL, password: DEMO_PASSWORD, workspaceId: ws.id, created: true };
 }
