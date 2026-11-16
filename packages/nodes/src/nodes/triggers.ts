@@ -87,6 +87,27 @@ export const chatTrigger = defineNode({
   docs: 'Each message emits `{ sessionId, message, history }`. The reply is taken from the configured field of the last executed node (e.g. the AI Agent `output`).',
 });
 
+export const appTrigger = defineNode({
+  type: 'simplyai.appTrigger', version: 1, displayName: 'App Trigger', category: 'trigger', icon: 'layout-dashboard', color: '#7c3aed',
+  description: 'Run from a button, form or page of an app built with the UI builder and return data to it', trigger: 'app', inputs: [], outputs: main,
+  properties: [
+    { name: 'info', displayName: 'In the UI builder, add a Workflow query that points to this workflow. The query payload becomes the output item and the output of the last executed node is returned to the app (as `query.data`). Published apps call the active version, the builder preview calls the saved draft.', type: 'notice', default: '' },
+    { name: 'testData', displayName: 'Test data (JSON)', type: 'json', default: '{}', description: 'Item emitted when the workflow is run from the editor' },
+  ],
+  docs: 'Connect this workflow to an app query. Each run receives the evaluated query payload, e.g. `{ "message": "Hello" }`, and the app receives the output of the last executed node. Runs time out after 60 seconds.',
+  async execute(ctx) {
+    const items = ctx.getInputItems();
+    if (items.some((i) => Object.keys(i.json).length > 0)) return [items];
+    const raw = ctx.getRawParam<string>('testData');
+    try {
+      const v = raw ? JSON.parse(raw) : {};
+      return [(Array.isArray(v) ? v : [v]).map((json) => ({ json }))];
+    } catch {
+      throw new NodeOperationError('Test data must be valid JSON');
+    }
+  },
+});
+
 export const appEventTrigger = defineNode({
   type: 'simplyai.appEventTrigger', version: 1, displayName: 'App Event Trigger', category: 'trigger', icon: 'zap', color: '#7c3aed',
   description: 'Run when an application event is emitted (API, other workflows or system events)', trigger: 'event', inputs: [], outputs: main,
@@ -201,7 +222,7 @@ export const errorTrigger = defineNode({
 });
 
 export const triggerNodes: NodeDefinition[] = [
-  manualTrigger, scheduleTrigger, webhookTrigger, formTrigger, emailTrigger, databaseTrigger, appEventTrigger, chatTrigger, errorTrigger,
+  manualTrigger, scheduleTrigger, webhookTrigger, formTrigger, emailTrigger, databaseTrigger, appEventTrigger, chatTrigger, appTrigger, errorTrigger,
 ];
 
 export function assertNever(v: never): never {

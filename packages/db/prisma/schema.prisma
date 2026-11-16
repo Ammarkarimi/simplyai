@@ -17,34 +17,34 @@ enum UserStatus {
 }
 
 model User {
-  id               String     @id @default(cuid())
-  email            String     @unique
-  name             String
-  passwordHash     String?
-  avatarUrl        String?
-  googleId         String?    @unique
-  emailVerifiedAt  DateTime?
-  isPlatformAdmin  Boolean    @default(false)
-  status           UserStatus @default(ACTIVE)
-  lastLoginAt      DateTime?
-  createdAt        DateTime   @default(now())
-  updatedAt        DateTime   @updatedAt
+  id              String     @id @default(cuid())
+  email           String     @unique
+  name            String
+  passwordHash    String?
+  avatarUrl       String?
+  googleId        String?    @unique
+  emailVerifiedAt DateTime?
+  isPlatformAdmin Boolean    @default(false)
+  status          UserStatus @default(ACTIVE)
+  lastLoginAt     DateTime?
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
 
-  sessions             Session[]
-  verificationTokens   VerificationToken[]
-  organizationMembers  OrganizationMember[]
-  workspaceMembers     WorkspaceMember[]
-  invitationsSent      Invitation[]         @relation("InvitationInviter")
-  workflowsCreated     Workflow[]           @relation("WorkflowCreator")
-  workflowVersions     WorkflowVersion[]
-  executionsStarted    Execution[]          @relation("ExecutionStarter")
-  credentialsCreated   Credential[]
-  apiKeys              ApiKey[]
-  agentsCreated        Agent[]
-  conversations        AgentConversation[]
-  templatesCreated     Template[]
-  auditLogs            AuditLog[]
-  secretsCreated       Secret[]
+  sessions            Session[]
+  verificationTokens  VerificationToken[]
+  organizationMembers OrganizationMember[]
+  workspaceMembers    WorkspaceMember[]
+  invitationsSent     Invitation[]         @relation("InvitationInviter")
+  workflowsCreated    Workflow[]           @relation("WorkflowCreator")
+  workflowVersions    WorkflowVersion[]
+  executionsStarted   Execution[]          @relation("ExecutionStarter")
+  credentialsCreated  Credential[]
+  apiKeys             ApiKey[]
+  agentsCreated       Agent[]
+  conversations       AgentConversation[]
+  templatesCreated    Template[]
+  auditLogs           AuditLog[]
+  secretsCreated      Secret[]
 }
 
 model Session {
@@ -98,13 +98,13 @@ model Organization {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  members       OrganizationMember[]
-  workspaces    Workspace[]
-  subscription  Subscription?
-  invoices      Invoice[]
-  usageRecords  UsageRecord[]
-  variables     Variable[]
-  auditLogs     AuditLog[]
+  members      OrganizationMember[]
+  workspaces   Workspace[]
+  subscription Subscription?
+  invoices     Invoice[]
+  usageRecords UsageRecord[]
+  variables    Variable[]
+  auditLogs    AuditLog[]
 }
 
 model OrganizationMember {
@@ -133,27 +133,28 @@ model Workspace {
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
 
-  organization     Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  members          WorkspaceMember[]
-  invitations      Invitation[]
-  roles            Role[]
-  workflows        Workflow[]
-  executions       Execution[]
-  credentials      Credential[]
-  webhooks         Webhook[]
-  agents           Agent[]
-  conversations    AgentConversation[]
-  agentMemory      AgentMemory[]
-  knowledgeBases   KnowledgeBase[]
-  dataTables       DataTable[]
-  variables        Variable[]
-  secrets          Secret[]
-  templates        Template[]
-  apiKeys          ApiKey[]
-  usageRecords     UsageRecord[]
-  auditLogs        AuditLog[]
-  files            StoredFile[]
-  triggers         TriggerRegistration[]
+  organization   Organization          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  members        WorkspaceMember[]
+  invitations    Invitation[]
+  roles          Role[]
+  workflows      Workflow[]
+  executions     Execution[]
+  credentials    Credential[]
+  webhooks       Webhook[]
+  agents         Agent[]
+  conversations  AgentConversation[]
+  agentMemory    AgentMemory[]
+  knowledgeBases KnowledgeBase[]
+  dataTables     DataTable[]
+  variables      Variable[]
+  secrets        Secret[]
+  templates      Template[]
+  apiKeys        ApiKey[]
+  usageRecords   UsageRecord[]
+  auditLogs      AuditLog[]
+  files          StoredFile[]
+  triggers       TriggerRegistration[]
+  apps           App[]
 
   @@unique([organizationId, slug])
   @@index([organizationId])
@@ -301,10 +302,10 @@ model WorkflowVersion {
   createdById String?
   createdAt   DateTime @default(now())
 
-  workflow     Workflow    @relation("WorkflowVersions", fields: [workflowId], references: [id], onDelete: Cascade)
-  createdBy    User?       @relation(fields: [createdById], references: [id], onDelete: SetNull)
-  activeFor    Workflow?   @relation("ActiveVersion")
-  executions   Execution[]
+  workflow   Workflow    @relation("WorkflowVersions", fields: [workflowId], references: [id], onDelete: Cascade)
+  createdBy  User?       @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  activeFor  Workflow?   @relation("ActiveVersion")
+  executions Execution[]
 
   @@unique([workflowId, version])
 }
@@ -363,32 +364,33 @@ enum ExecutionMode {
   RETRY
   SUBWORKFLOW
   ERROR
+  APP
 }
 
 model Execution {
-  id                String          @id @default(cuid())
-  workspaceId       String
-  workflowId        String
-  workflowVersionId String?
-  mode              ExecutionMode
-  status            ExecutionStatus @default(QUEUED)
-  triggerNodeKey    String?
+  id                 String          @id @default(cuid())
+  workspaceId        String
+  workflowId         String
+  workflowVersionId  String?
+  mode               ExecutionMode
+  status             ExecutionStatus @default(QUEUED)
+  triggerNodeKey     String?
   /// Run only the ancestors of this node (editor "run to here")
   destinationNodeKey String?
-  workflowSnapshot  Json
-  inputData         Json?
-  outputData        Json?
-  error             Json?
+  workflowSnapshot   Json
+  inputData          Json?
+  outputData         Json?
+  error              Json?
   /// Serialized engine state for WAITING executions
-  state             Json?
-  waitUntil         DateTime?
-  retryOfId         String?
-  parentExecutionId String?
-  createdById       String?
-  queuedAt          DateTime        @default(now())
-  startedAt         DateTime?
-  finishedAt        DateTime?
-  durationMs        Int?
+  state              Json?
+  waitUntil          DateTime?
+  retryOfId          String?
+  parentExecutionId  String?
+  createdById        String?
+  queuedAt           DateTime        @default(now())
+  startedAt          DateTime?
+  finishedAt         DateTime?
+  durationMs         Int?
 
   workspace       Workspace        @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
   workflow        Workflow         @relation(fields: [workflowId], references: [id], onDelete: Cascade)
@@ -463,10 +465,10 @@ model Credential {
   createdAt     DateTime         @default(now())
   updatedAt     DateTime         @updatedAt
 
-  workspace     Workspace      @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  createdBy     User?          @relation(fields: [createdById], references: [id], onDelete: SetNull)
-  nodes         WorkflowNode[]
-  agents        Agent[]
+  workspace      Workspace       @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  createdBy      User?           @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  nodes          WorkflowNode[]
+  agents         Agent[]
   knowledgeBases KnowledgeBase[]
 
   @@unique([workspaceId, name])
@@ -556,31 +558,31 @@ model WebhookRequest {
 // ─────────────────────────────── AI ───────────────────────────────
 
 model Agent {
-  id             String   @id @default(cuid())
-  workspaceId    String
-  name           String
-  description    String?
-  systemPrompt   String   @default("")
-  provider       String
-  model          String
-  credentialId   String?
-  temperature    Float    @default(0.7)
-  maxTokens      Int      @default(1024)
-  maxIterations  Int      @default(6)
+  id            String   @id @default(cuid())
+  workspaceId   String
+  name          String
+  description   String?
+  systemPrompt  String   @default("")
+  provider      String
+  model         String
+  credentialId  String?
+  temperature   Float    @default(0.7)
+  maxTokens     Int      @default(1024)
+  maxIterations Int      @default(6)
   /// [{ type: 'http'|'workflow'|'code'|'knowledge'|'dataTable'|'calculator'|'datetime', name, description, config, requiresApproval }]
-  tools          Json     @default("[]")
-  memoryEnabled  Boolean  @default(true)
-  memoryWindow   Int      @default(20)
-  inputFormat    String   @default("text")
-  outputFormat   String   @default("text")
-  outputSchema   Json?
-  createdById    String?
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  tools         Json     @default("[]")
+  memoryEnabled Boolean  @default(true)
+  memoryWindow  Int      @default(20)
+  inputFormat   String   @default("text")
+  outputFormat  String   @default("text")
+  outputSchema  Json?
+  createdById   String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  workspace      Workspace           @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
-  credential     Credential?         @relation(fields: [credentialId], references: [id], onDelete: SetNull)
-  createdBy      User?               @relation(fields: [createdById], references: [id], onDelete: SetNull)
+  workspace      Workspace            @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  credential     Credential?          @relation(fields: [credentialId], references: [id], onDelete: SetNull)
+  createdBy      User?                @relation(fields: [createdById], references: [id], onDelete: SetNull)
   conversations  AgentConversation[]
   memory         AgentMemory[]
   knowledgeBases AgentKnowledgeBase[]
@@ -1019,4 +1021,54 @@ model FeatureFlag {
   /// workspace ids that always get the flag
   workspaceIds      String[]
   updatedAt         DateTime @updatedAt
+}
+
+// ─────────────────────────────────────────────────────────────
+// UI builder: apps made of pages and components
+// ─────────────────────────────────────────────────────────────
+
+enum AppAccess {
+  PRIVATE
+  PUBLIC
+}
+
+/// An internal tool or public page built with the drag & drop UI builder.
+/// `definition` is the editable draft (pages, component tree, queries, theme);
+/// published snapshots live in AppVersion.
+model App {
+  id                 String    @id @default(cuid())
+  workspaceId        String
+  name               String
+  description        String?
+  slug               String    @unique
+  icon               String    @default("layout-dashboard")
+  color              String    @default("#7c3aed")
+  definition         Json
+  access             AppAccess @default(PRIVATE)
+  publishedVersionId String?   @unique
+  publishedAt        DateTime?
+  createdById        String?
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  workspace        Workspace    @relation(fields: [workspaceId], references: [id], onDelete: Cascade)
+  versions         AppVersion[] @relation("AppVersions")
+  publishedVersion AppVersion?  @relation("PublishedAppVersion", fields: [publishedVersionId], references: [id], onDelete: SetNull)
+
+  @@index([workspaceId])
+}
+
+model AppVersion {
+  id          String   @id @default(cuid())
+  appId       String
+  version     Int
+  definition  Json
+  message     String?
+  createdById String?
+  createdAt   DateTime @default(now())
+
+  app         App  @relation("AppVersions", fields: [appId], references: [id], onDelete: Cascade)
+  publishedIn App? @relation("PublishedAppVersion")
+
+  @@unique([appId, version])
 }

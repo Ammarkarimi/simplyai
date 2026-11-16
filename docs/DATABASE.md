@@ -25,6 +25,7 @@ Organization 1─* Workspace 1─* Workflow 1─* WorkflowNode
      │              ├─* Secret (encrypted)
      │              ├─* Template (workspace-shared or private)
      │              ├─* ApiKey (SHA-256 hashed)
+     │              ├─* App 1─* AppVersion (UI builder; draft JSON + published snapshots)
      │              └─* StoredFile
      ├─* OrganizationMember *─1 User
      ├─1 Subscription *─1 Plan
@@ -37,6 +38,13 @@ AuditLog, SystemLog, FeatureFlag, Integration (catalog) – platform level
 ```
 
 ## Design notes
+
+* **UI builder apps** – `App.definition` holds the editable draft (pages,
+  component tree, queries, state, theme) as JSON validated by
+  `appDefinitionSchema` (`@simplyai/shared`). `AppVersion` rows are immutable
+  published snapshots; `App.publishedVersionId` points at the one served at
+  `/a/<slug>`. `App.access` is `PRIVATE` (workspace members with `app:read`)
+  or `PUBLIC`. Workflows started by apps use `ExecutionMode.APP`.
 
 * **Normalized workflow graph** – the editable draft is stored in
   `WorkflowNode` / `WorkflowConnection` (unique `(workflowId, nodeKey)` and

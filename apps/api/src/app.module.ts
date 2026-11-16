@@ -23,12 +23,13 @@ import { AdminModule } from './modules/admin/admin.module';
 import { EventsModule } from './modules/events/events.module';
 import { RealtimeModule } from './modules/realtime/realtime.module';
 import { HealthModule } from './modules/health/health.module';
+import { AppsModule } from './modules/apps/apps.module';
 
 @Module({
   imports: [
     InfraModule, CommonModule, AuthModule, WorkspacesModule, WorkflowsModule, ExecutionsModule, CatalogModule, CredentialsModule, WebhooksModule,
     VariablesModule, DataTablesModule, TemplatesModule, ApiKeysModule, AgentsModule, KnowledgeModule, BillingModule, DashboardModule,
-    AdminModule, EventsModule, RealtimeModule, HealthModule,
+    AdminModule, EventsModule, RealtimeModule, HealthModule, AppsModule,
   ],
   providers: [
     { provide: APP_GUARD, useExisting: AuthGuard },

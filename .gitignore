@@ -13,3 +13,6 @@ storage/
 playwright-report
 test-results
 .DS_Store
+
+# local database snapshots
+*.rdb

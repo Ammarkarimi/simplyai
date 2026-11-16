@@ -113,7 +113,7 @@ export class WorkflowsService {
     }
     const registry = getRegistry();
     if (!def.nodes.some((n) => !n.disabled && registry.getNode(n.type)?.trigger && registry.getNode(n.type)?.trigger !== 'manual'))
-      throw new BadRequestException('Add a schedule, webhook, form, chat, polling or event trigger before activating. Manual triggers only run from the editor or API.');
+      throw new BadRequestException('Add a schedule, webhook, form, chat, app, polling or event trigger before activating. Manual triggers only run from the editor or API.');
     await activateTriggers(this.db, this.q.queues, { id, workspaceId: ws.workspaceId }, def);
     await this.db.workflow.update({ where: { id }, data: { active: true, activeVersionId: versionId } });
     await audit(this.db, { action: 'workflow.activated', userId: ws.userId, workspaceId: ws.workspaceId, resourceType: 'workflow', resourceId: id });

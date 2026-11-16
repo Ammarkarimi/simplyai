@@ -28,6 +28,20 @@ async function run(def: WorkflowDefinition, triggerItems?: Item[], opts: Partial
 }
 
 describe('workflow engine', () => {
+  it('passes the app payload through the App Trigger and falls back to test data', async () => {
+    const def: WorkflowDefinition = {
+      nodes: [
+        node('app', 'simplyai.appTrigger', { testData: '{"email":"test@example.com"}' }),
+        node('tier', 'simplyai.set', { assignments: [{ name: 'tier', type: 'string', value: '{{ String($json.email).endsWith(".com") ? "Warm" : "Cold" }}' }] }),
+      ],
+      connections: [edge('app', 'tier')],
+    };
+    const live = await run(def, [{ json: { email: 'ada@analytical.org' } }]);
+    expect(live.result.output).toEqual([{ json: { email: 'ada@analytical.org', tier: 'Cold' }, pairedItem: 0 }]);
+    const test = await run(def);
+    expect(test.result.output[0]!.json).toEqual({ email: 'test@example.com', tier: 'Warm' });
+  });
+
   it('runs a sequential chain and passes data', async () => {
     const { result } = await run({
       nodes: [node('t', 'simplyai.manualTrigger'), node('set', 'simplyai.set', { assignments: [{ name: 'greeting', type: 'string', value: 'Hi {{ $json.name }}' }] })],

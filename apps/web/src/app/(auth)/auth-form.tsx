@@ -18,7 +18,7 @@ export function useAuthSubmit() {
     qc.setQueryData(['me'], me);
     const current = useWorkspaceStore.getState().workspaceId;
     if (!current || !me.workspaces.some((w) => w.id === current)) setWorkspace(me.workspaces[0]?.id ?? null);
-    router.push(next ?? '/overview');
+    router.push(next && next.startsWith('/') && !next.startsWith('//') && !next.startsWith('/\\') ? next : '/overview');
   };
 }
 

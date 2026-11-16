@@ -48,6 +48,22 @@ The web app uses the same endpoints with a session cookie, an `x-workspace-id` h
 | POST | `/executions/:id/approve` | `{ approved, comment? }` for Human Approval steps |
 | POST | `/events` | `{ event, payload }` → starts workflows with a matching App Event Trigger |
 
+## Apps (UI builder)
+
+Session authentication (web app). `app:read` for reads, `app:manage` for changes.
+
+| Method | Path | Description |
+|---|---|---|
+| GET | `/apps` · `/apps/templates` | List apps · starter templates |
+| POST | `/apps` | `{ name, template?, definition? }` |
+| GET / PATCH / DELETE | `/apps/:id` | Read · update `{ name, description, icon, color, slug, access: PRIVATE\|PUBLIC, definition }` · delete |
+| POST | `/apps/:id/duplicate` | Copy as a new draft |
+| POST | `/apps/:id/publish` · `/apps/:id/unpublish` | `{ message? }` → new `AppVersion` served at `/a/<slug>` |
+| GET | `/apps/:id/versions` · POST `/apps/:id/versions/:versionId/restore` | History · restore into the draft |
+| POST | `/apps/:id/queries/:queryId/run` | Builder preview: `{ args, query? }`, workflow queries run the workflow draft |
+| GET | `/public/apps/:slug` | Published definition (public apps: anyone; private: workspace members) |
+| POST | `/public/apps/:slug/queries/:queryId` | `{ args }` → `{ data, meta }`; workflow queries require an active workflow with an App Trigger |
+
 ## Workflow definition format
 
 ```json
